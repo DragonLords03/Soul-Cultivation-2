@@ -187,6 +187,18 @@ local function Restore()
     _G.Auto_Restore = false
 end
 
+local function Breaktrhough_training()
+    local args = {[1] = "Body Refining",[2] = true}
+    game:GetService("ReplicatedStorage").RemoteFunctions.CastAbility:InvokeServer(unpack(args))
+    task.wait(0.5)
+    local args = {[1] = "Use",[2] = 1,[3] = "Restoration Pill",[4] = "Low",[5] = "IT. 1"}
+    game:GetService("ReplicatedStorage").RemoteEvents.Item:FireServer(unpack(args))
+    task.wait(0.3)
+    local args = {[1] = "Body"}
+    game:GetService("ReplicatedStorage").RemoteEvents.Breakthrough:FireServer(unpack(args))
+    task.wait()
+end
+
 b:CreateToggle("Auto Farm", function(value)
     _G.Auto_Grind = value
     if value and selectedEnemyType ~= "" then
@@ -220,4 +232,8 @@ b:CreateTextbox("Restore Times", function(text)
     else
         print("Invalid restore times")
     end
+end)
+
+b:CreateButton("Breaktrhough Training", function(value)
+    Breaktrhough_training()
 end)
