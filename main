@@ -12,7 +12,10 @@ end)
 
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
 local ui = Library:NewWindow("Soul Cultivation")
-local a = ui:NewSection("Herbs")
+local ui2 = Library:NewWindow("Soul Cultivation")
+local b = ui:NewSection("Farm")
+local a = ui2:NewSection("Herbs")
+local c = ui2:NewSection("Brew")
 
 local function createFarmFunction(herbType)
     return function()
@@ -28,8 +31,81 @@ local function createFarmFunction(herbType)
                     task.wait(_G["WaitTime_" .. herbType] or 1)
                 end
             end
+            task.wait(0.1)
         end
     end
+end
+
+local function groupEnemiesByName()
+    local enemies = game:GetService("Workspace").Enemies:GetChildren()
+    local groupedEnemies = {}
+
+    for _, enemy in pairs(enemies) do
+        local enemyName = enemy.Name
+        if not groupedEnemies[enemyName] then
+            groupedEnemies[enemyName] = {}
+        end
+        table.insert(groupedEnemies[enemyName], enemy)
+    end
+
+    return groupedEnemies
+end
+
+local enemyToNpcMap = {
+    Commoner = "Xi Hao",
+    Bandit = "Bei Fang",
+    ["Female Blood Cultivator"] = "Yang Wei",
+    ["Furious Sect Member"] = "Taoist Xi",
+    ["Male Assassin"] = "Sun Tao",
+    ["Sect Master"] = "Gao Xiang",
+    ["Male Blood Cultivator"] = "Tong Li",
+    ["Bao Laohu"] = "Wu Hao",
+    ["Corrupt Commoner"] = "Xia Hui",
+    ["Corrupt Minion"] = "Zhing Xiu",
+    ["Corrupt Admiral"] = "Xian Ling",
+    ["Mount Hua Leader"] = "Yang Zhu"
+}
+
+local function grindEnemies(enemyType)
+    local npcName = enemyToNpcMap[enemyType]
+    if not npcName then
+        print("No NPC mapped for enemy type: " .. enemyType)
+        return
+    end
+    
+    while _G.Auto_Grind and selectedEnemyType == enemyType do
+        local enemies = game:GetService("Workspace").Enemies:GetChildren()
+        for _, enemy in ipairs(enemies) do
+            if not _G.Auto_Grind or selectedEnemyType ~= enemyType then return end
+            if enemy.Name == enemyType then
+                local humanoidRootPart = enemy:FindFirstChild("HumanoidRootPart")
+                if humanoidRootPart then
+                    -- Take the quest
+                    local questArgs = { npcName }
+                    game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
+                    
+                    -- Teleport and attack
+                    localPlayer.Character.HumanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, -3, 0)
+                    task.wait(0.5)
+                    local args = {
+                        [1] = "Light",
+                        [2] = {
+                            ["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+                        }
+                    }
+                    game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
+                    task.wait(0.5)
+                end
+            end
+        end
+        task.wait(0.1)
+    end
+end
+
+local groupedEnemies = groupEnemiesByName()
+local enemyNames = {}
+for enemyName, _ in pairs(groupedEnemies) do
+    table.insert(enemyNames, enemyName)
 end
 
 local function Brew()
@@ -85,7 +161,7 @@ for _, herb in ipairs(herbs) do
         end
     end)
     
-    a:CreateTextbox("" .. herbName, function(text)
+    a:CreateTextbox("Wait Time for " .. herbName, function(text)
         local waitTime = tonumber(text)
         if waitTime then
             _G["WaitTime_" .. herbName] = waitTime
@@ -96,9 +172,20 @@ for _, herb in ipairs(herbs) do
     end)
 end
 
-a:CreateToggle("brew with 10y Ginseng", function(value)
+c:CreateToggle("brew with 10y Ginseng", function(value)
     _G.Auto_brew = value
     if value then
         task.spawn(Brew)
     end
+end)
+
+b:CreateToggle("Auto Grind", function(value)
+    _G.Auto_Grind = value
+    if value and selectedEnemyType ~= "" then
+        task.spawn(function() grindEnemies(selectedEnemyType) end)
+    end
+end)
+
+b:CreateDropdown("Select Enemy Type", enemyNames, 1, function(selected)
+    selectedEnemyType = selected
 end)
