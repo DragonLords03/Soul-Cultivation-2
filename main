@@ -85,7 +85,7 @@ local function grindEnemies(enemyType)
                     game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
                     
                     localPlayer.Character.HumanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, -3, 0)
-                    task.wait(0.3)
+                    task.wait(0.2)
                     local args = {
                         [1] = "Light",
                         [2] = {
