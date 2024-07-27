@@ -55,6 +55,7 @@ local function Brew()
             }
         }
         game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
+        task.wait(1)
     end
 end
 
