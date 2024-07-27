@@ -14,6 +14,7 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/blood
 local ui = Library:NewWindow("Soul Cultivation")
 local ui2 = Library:NewWindow("Soul Cultivation")
 local b = ui:NewSection("Farm")
+local d = ui:NewSection("Training")
 local c = ui:NewSection("Brew")
 local a = ui2:NewSection("Herbs")
 
@@ -217,14 +218,14 @@ c:CreateToggle("brew with 10y Ginseng", function(value)
     end
 end)
 
-b:CreateToggle("Restore Fatigue", function(value)
+d:CreateToggle("Restore Fatigue", function(value)
     _G.Auto_Restore = value
     if value then
         task.spawn(Restore)
     end
 end)
 
-b:CreateTextbox("Restore Times", function(text)
+d:CreateTextbox("Restore Times", function(text)
     local times = tonumber(text)
     if times then
         _G["Restore_Times"] = times
@@ -234,6 +235,6 @@ b:CreateTextbox("Restore Times", function(text)
     end
 end)
 
-b:CreateButton("Breaktrhough Training", function(value)
+d:CreateButton("Breaktrhough Training", function(value)
     Breaktrhough_training()
 end)
