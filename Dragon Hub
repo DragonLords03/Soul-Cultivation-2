@@ -1,0 +1,70 @@
+--loadstring(game:HttpGet(""))()
+
+local bb = game:GetService("VirtualUser")
+local players = game:GetService("Players")
+local localPlayer = players.LocalPlayer
+
+players.LocalPlayer.Idled:Connect(function()
+    bb:CaptureController()
+    bb:ClickButton2(Vector2.new())
+    print("Anti AFK: Prevented kick due to inactivity.")
+end)
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+local ui = Library:NewWindow("Soul Cultivation")
+local a = ui:NewSection("Herbs")
+
+local function createFarmFunction(herbType)
+    return function()
+        while _G["Auto_Farm_" .. herbType] do
+            local herbFolder = game:GetService("Workspace").Herbs[herbType]
+            for _, herb in pairs(herbFolder:GetChildren()) do
+                if not _G["Auto_Farm_" .. herbType] then return end
+                local herbPart = herb:FindFirstChild("HerbZone")
+                if herbPart then
+                    localPlayer.Character.HumanoidRootPart.CFrame = herbPart.CFrame
+                    task.wait(0.75)
+                    game:GetService("ReplicatedStorage").RemoteEvents.Harvest:FireServer()
+                    task.wait(_G["WaitTime_" .. herbType] or 1)
+                end
+            end
+        end
+    end
+end
+
+local herbs = {
+    "Spirit Grass",
+    "Lingzhi",
+    "Ginseng",
+    "Moonlight Flowers",
+    "Yin Bush",
+    "Yang Flower",
+    "Blood Flowers",
+    "Qilin Berries",
+    "Taixian",
+    "Twilight Bloom"
+}
+
+for _, herb in ipairs(herbs) do
+    local herbName = herb
+    _G["Auto_Farm_" .. herbName] = false
+    _G["WaitTime_" .. herbName] = 1
+    _G["Farm_" .. herbName] = createFarmFunction(herbName)
+    
+    a:CreateToggle("Farm " .. herbName, function(value)
+        _G["Auto_Farm_" .. herbName] = value
+        if value then
+            task.spawn(_G["Farm_" .. herbName])
+        end
+    end)
+    
+    a:CreateTextbox("" .. herbName, function(text)
+        local waitTime = tonumber(text)
+        if waitTime then
+            _G["WaitTime_" .. herbName] = waitTime
+            print("Set wait time for " .. herbName .. " to " .. waitTime .. " seconds")
+        else
+            print("Invalid wait time for " .. herbName)
+        end
+    end)
+end
