@@ -94,6 +94,8 @@ local function grindEnemies(enemyType)
                     }
                     game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
                     task.wait(0.5)
+                    local questArgs = { npcName }
+                    game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
                 end
             end
         end
