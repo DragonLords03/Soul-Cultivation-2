@@ -1,4 +1,4 @@
---loadstring(game:HttpGet("https://raw.githubusercontent.com/DragonLords03/Soul-Cultivation-2/main/main"))()
+--loadstring(game:HttpGet(""))()
 
 local bb = game:GetService("VirtualUser")
 local players = game:GetService("Players")
@@ -29,6 +29,32 @@ local function createFarmFunction(herbType)
                 end
             end
         end
+    end
+end
+
+local function Brew()
+    while Auto_brew do
+        local args = {
+            [1] = {
+                [1] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Ten"
+                },
+                [2] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Ten"
+                },
+                [3] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Ten"
+                },
+                [4] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Ten"
+                }
+            }
+        }
+        game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
     end
 end
 
@@ -68,3 +94,8 @@ for _, herb in ipairs(herbs) do
         end
     end)
 end
+
+a:CreateToggle("Auto brew (with 10y gensing)", function(value)
+    _G.Auto_brew = value
+    Brew()
+end)
