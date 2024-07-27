@@ -1,4 +1,4 @@
---loadstring(game:HttpGet(""))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/DragonLords03/Soul-Cultivation-2/main/DragonHub"))()
 
 local bb = game:GetService("VirtualUser")
 local players = game:GetService("Players")
