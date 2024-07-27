@@ -1,4 +1,4 @@
---loadstring(game:HttpGet(""))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/DragonLords03/Soul-Cultivation-2/main/main"))()
 
 local bb = game:GetService("VirtualUser")
 local players = game:GetService("Players")
@@ -33,7 +33,7 @@ local function createFarmFunction(herbType)
 end
 
 local function Brew()
-    while Auto_brew do
+    while _G.Auto_brew do
         local args = {
             [1] = {
                 [1] = {
