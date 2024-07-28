@@ -13,107 +13,12 @@ end)
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
 local ui = Library:NewWindow("Soul Cultivation")
 local ui2 = Library:NewWindow("Soul Cultivation")
+local ui3 = Library:NewWindow("Soul Cultivation")
 local b = ui:NewSection("Farm")
 local d = ui:NewSection("Training")
 local c = ui:NewSection("Brew")
 local a = ui2:NewSection("Herbs")
-
-local function createFarmFunction(herbType)
-    return function()
-        while _G["Auto_Farm_" .. herbType] do  
-            local herbFolder = game:GetService("Workspace").Herbs[herbType]
-            for _, herb in pairs(herbFolder:GetChildren()) do
-                if not _G["Auto_Farm_" .. herbType] then return end
-                local herbPart = herb:FindFirstChild("HerbZone")
-                if herbPart then
-                    if herbType == "Blood Flowers" then
-                        local questArgs = { "Zhang Yiwang" }
-                        game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
-                        task.wait(0.5)
-                    end
-                    localPlayer.Character.HumanoidRootPart.CFrame = herbPart.CFrame
-                    task.wait(0.7)
-                    game:GetService("ReplicatedStorage").RemoteEvents.Harvest:FireServer()
-                    task.wait(_G["WaitTime_" .. herbType] or 1)
-                end
-            end
-            task.wait(0.1)
-        end
-    end
-end
-
-local function groupEnemiesByName()
-    local enemies = game:GetService("Workspace").Enemies:GetChildren()
-    local groupedEnemies = {}
-
-    for _, enemy in pairs(enemies) do
-        local enemyName = enemy.Name
-        if not groupedEnemies[enemyName] then
-            groupedEnemies[enemyName] = {}
-        end
-        table.insert(groupedEnemies[enemyName], enemy)
-    end
-
-    return groupedEnemies
-end
-
-local enemyToNpcMap = {
-    ["Commoner"] = "Xi Hao",
-    ["Bandit"] = "Bei Fang",
-    ["Female Blood Cultivator"] = "Yang Wei",
-    ["Furious Sect Member"] = "Taoist Xi",
-    ["Male Assassin"] = "Sun Tao",
-    ["Sect Master"] = "Gao Xiang",
-    ["Male Blood Cultivator"] = "Tong Li",
-    ["Bao Laohu"] = "Wu Hao",
-    ["Corrupt Commoner"] = "Xia Hui",
-    ["Corrupt Minion"] = "Zhing Xiu",
-    ["Corrupt Admiral"] = "Xian Ling",
-    ["Mount Hua Leader"] = "Yang Zhu"
-}
-
-local function grindEnemies(enemyType)
-    local npcName = enemyToNpcMap[enemyType]
-    if not npcName then
-        print("No NPC mapped for enemy type: " .. enemyType)
-        return
-    end
-    
-    local lastHumanoidRootPart = nil
-
-    while _G.Auto_Grind and selectedEnemyType == enemyType do
-        local enemies = game:GetService("Workspace").Enemies:GetChildren()
-        for _, enemy in ipairs(enemies) do
-            if not _G.Auto_Grind or selectedEnemyType ~= enemyType then return end
-            if enemy.Name == enemyType then
-                local humanoidRootPart = enemy:FindFirstChild("HumanoidRootPart")
-                if humanoidRootPart and humanoidRootPart ~= lastHumanoidRootPart then
-                    lastHumanoidRootPart = humanoidRootPart
-
-                    local questArgs = { npcName }
-                    game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
-                    
-                    localPlayer.Character.HumanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, -3, 0)
-                    task.wait(0.25)
-
-                    local args = {[1] = "Light",[2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                    game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                    task.wait(0.5)
-
-                    local questArgs = { npcName }
-                    game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
-                end
-            end
-        end
-        task.wait(0.1)
-    end
-end
-
-local groupedEnemies = groupEnemiesByName()
-local enemyNames = {}
-for enemyName, _ in pairs(groupedEnemies) do
-    table.insert(enemyNames, enemyName)
-end
+local e = ui3:NewSection("Special Farming")
 
 local herbs = {
     "Spirit Grass",
@@ -127,6 +32,30 @@ local herbs = {
     "Taixian",
     "Twilight Bloom"
 }
+
+local function createFarmFunction(herbType)
+    return function()
+        while _G["Auto_Farm_" .. herbType] do
+            local herbFolder = game:GetService("Workspace").Herbs[herbType]
+            for _, herb in pairs(herbFolder:GetChildren()) do
+                if not _G["Auto_Farm_" .. herbType] then return end
+                local herbPart = herb:FindFirstChild("HerbZone")
+                if herbPart then
+                    if herbType == "Blood Flowers" then
+                        local questArgs = { "Zhang Yiwang" }
+                        game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
+                        task.wait()
+                    end
+                    localPlayer.Character.HumanoidRootPart.CFrame = herbPart.CFrame
+                    task.wait(0.7)
+                    game:GetService("ReplicatedStorage").RemoteEvents.Harvest:FireServer()
+                    task.wait(_G["WaitTime_" .. herbType] or 1)
+                end
+            end
+            task.wait()
+        end
+    end
+end
 
 for _, herb in ipairs(herbs) do
     local herbName = herb
@@ -152,6 +81,143 @@ for _, herb in ipairs(herbs) do
     end)
 end
 
+local function groupEnemiesByName()
+    local enemies = game:GetService("Workspace").Enemies:GetChildren()
+    local groupedEnemies = {}
+
+    for _, enemy in pairs(enemies) do
+        local enemyName = enemy.Name
+        if not groupedEnemies[enemyName] then
+            groupedEnemies[enemyName] = {}
+        end
+        table.insert(groupedEnemies[enemyName], enemy)
+    end
+
+    return groupedEnemies
+end
+
+local groupedEnemies = groupEnemiesByName()
+local enemyNames = {}
+for enemyName, _ in pairs(groupedEnemies) do
+    table.insert(enemyNames, enemyName)
+end
+
+local enemyToNpcMap = {
+    ["Commoner"] = "Xi Hao",
+    ["Bandit"] = "Bei Fang",
+    ["Female Blood Cultivator"] = "Yang Wei",
+    ["Furious Sect Member"] = "Taoist Xi",
+    ["Male Assassin"] = "Sun Tao",
+    ["Sect Master"] = "Gao Xiang",
+    ["Male Blood Cultivator"] = "Tong Li",
+    ["Bao Laohu"] = "Wu Hao",
+    ["Corrupt Commoner"] = "Xia Hui",
+    ["Corrupt Minion"] = "Zhing Xiu",
+    ["Corrupt Admiral"] = "Xian Ling",
+    ["Mount Hua Leader"] = "Yang Zhu"
+}
+
+local function grindEnemies(enemyType)
+    local npcName = enemyToNpcMap[enemyType]
+    if not npcName then
+        print("No NPC mapped for enemy type: " .. enemyType)
+        return
+    end
+    
+    local lastHumanoidRootPart = {}
+    local args = {[1] = "Quest"}
+    game:GetService("ReplicatedStorage").RemoteEvents.Discard:FireServer(unpack(args))
+    task.wait()
+    while _G.Auto_Grind and selectedEnemyType == enemyType do
+        local enemies = game:GetService("Workspace").Enemies:GetChildren()
+        for _, enemy in ipairs(enemies) do
+            if not _G.Auto_Grind or selectedEnemyType ~= enemyType then return end
+            if enemy.Name == enemyType and not lastHumanoidRootPart[enemy] then
+                local humanoidRootPart = enemy:FindFirstChild("HumanoidRootPart")
+                if humanoidRootPart then
+                    lastHumanoidRootPart[enemy] = humanoidRootPart
+
+                    local questArgs = { npcName }
+                    game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
+                    
+                    localPlayer.Character.HumanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, -3, 0)
+                    task.wait(0.15)
+
+                    local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
+                    game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
+                    task.wait(0.15)
+
+                    local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
+                    game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
+                    task.wait(0.15)
+
+                    game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
+                end
+            end
+        end
+        task.wait()
+    end
+end
+
+local function AutoKill()
+    local function getAndKillEnemies(enemyType, count)
+        local npcName = enemyToNpcMap[enemyType]
+        if not npcName then
+            print("No NPC mapped for enemy type: " .. enemyType)
+            return
+        end
+
+        local killed = 0
+        local lastHumanoidRootPart = {}
+        local args = {[1] = "Quest"}
+        game:GetService("ReplicatedStorage").RemoteEvents.Discard:FireServer(unpack(args))
+        task.wait()
+        while _G.AutoKill and killed < count do
+            local enemies = game:GetService("Workspace").Enemies:GetChildren()
+            for _, enemy in ipairs(enemies) do
+                if enemy.Name == enemyType and not lastHumanoidRootPart[enemy] then
+                    local humanoidRootPart = enemy:FindFirstChild("HumanoidRootPart")
+                    if humanoidRootPart then
+                        lastHumanoidRootPart[enemy] = humanoidRootPart
+
+                        local questArgs = { npcName }
+                        game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
+
+                        localPlayer.Character.HumanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, -3, 0)
+                        task.wait(0.13)
+
+                        local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
+                        game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
+                        task.wait(0.13)
+
+                        local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
+                        game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
+                        task.wait(0.13)
+
+                        killed = killed + 1
+                        if killed >= count then
+                            local nextNpcName
+                            if enemyType == "Corrupt Admiral" then
+                                nextNpcName = "Yang Zhu"
+                            end
+                            game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(nextNpcName)
+                            break
+                        else
+                            game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
+                        end
+                    end
+                end
+            end
+            task.wait()
+        end
+    end
+
+    while _G.AutoKill do
+        getAndKillEnemies("Corrupt Admiral", 6)
+        getAndKillEnemies("Mount Hua Leader", 1)
+    end
+end
+
 local function Brew(recipe)
     while _G["Auto_brew_" .. recipe.name] do
         local args = { [1] = recipe.ingredients }
@@ -163,23 +229,26 @@ end
 local variationToNumber = {
     ["Ten"] = "10",
     ["Hundred"] = "100",
-    ["Thousand"] = "1k",
-    ["Ten Thousand"] = "10k"
+    ["Thousand"] = "1K",
+    ["Ten Thousand"] = "10K",
+    ["Hundred Thousand"] = "100K",
+    ["Million"] = "1M"
 }
 
 local recipes = {
-    { name = "Brew1", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Ten" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" } } },
-    { name = "Brew2", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" } } },
-    { name = "Brew3", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" } } },
-    { name = "Brew4", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" } } },
-    { name = "Brew5", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" }, { ["Name"] = "Ginseng", ["Variation"] = "Ten Thousand" } } },
-    { name = "Brew6", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Thousand" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" }, { ["Name"] = "Ginseng", ["Variation"] = "Ten Thousand" } } }
+    { name = "Brew1", ingredients = { { Name = "Ginseng", Variation = "Ten" }, { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Thousand" } } },
+    { name = "Brew2", ingredients = { { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Hundred" } } },
+    { name = "Brew3", ingredients = { { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Thousand" } } },
+    { name = "Brew4", ingredients = { { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" } } },
+    { name = "Brew5", ingredients = { { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" } } },
+    { name = "Brew6", ingredients = { { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" } } },
+    { name = "Brew7", ingredients = { { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" } } }
 }
 
 for _, recipe in ipairs(recipes) do
     local variations = {}
     for _, ingredient in ipairs(recipe.ingredients) do
-        table.insert(variations, variationToNumber[ingredient["Variation"]] .. "y")
+        table.insert(variations, variationToNumber[ingredient.Variation] .. "y")
     end
     local toggleName = table.concat(variations, "/")
 
@@ -195,28 +264,18 @@ local function Restore()
     local timesToRun = _G["Restore_Times"] or 1
     for i = 1, timesToRun do
         if not _G.Auto_Restore then return end
-        local args = {
-            [1] = "Use",
-            [2] = 1,
-            [3] = "Restoration Pill",
-            [4] = "Low",
-            [5] = "IT. 1"
-        }
-        game:GetService("ReplicatedStorage").RemoteEvents.Item:FireServer(unpack(args))
+        game:GetService("ReplicatedStorage").RemoteEvents.Item:FireServer("Use", 1, "Restoration Pill", "Low", "IT. 1")
         task.wait(99)
     end
     _G.Auto_Restore = false
 end
 
 local function Breakthrough_training()
-    local args = { [1] = "Body Refining", [2] = true }
-    game:GetService("ReplicatedStorage").RemoteFunctions.CastAbility:InvokeServer(unpack(args))
+    game:GetService("ReplicatedStorage").RemoteFunctions.CastAbility:InvokeServer("Body Refining", true)
     task.wait(0.6)
-    local args = { [1] = "Use", [2] = 1, [3] = "Restoration Pill", [4] = "Low", [5] = "IT. 1" }
-    game:GetService("ReplicatedStorage").RemoteEvents.Item:FireServer(unpack(args))
+    game:GetService("ReplicatedStorage").RemoteEvents.Item:FireServer("Use", 1, "Restoration Pill", "Low", "IT. 1")
     task.wait(0.4)
-    local args = { [1] = "Body" }
-    game:GetService("ReplicatedStorage").RemoteEvents.Breakthrough:FireServer(unpack(args))
+    game:GetService("ReplicatedStorage").RemoteEvents.Breakthrough:FireServer("Body")
     task.wait()
 end
 
@@ -248,6 +307,13 @@ d:CreateTextbox("Restore Times", function(text)
     end
 end)
 
-d:CreateButton("Breakthrough Training", function(value)
+d:CreateButton("Breakthrough Training", function()
     Breakthrough_training()
+end)
+
+e:CreateToggle("Auto Kill", function(value)
+    _G.AutoKill = value
+    if value then
+        task.spawn(AutoKill)
+    end
 end)
