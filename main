@@ -215,7 +215,7 @@ local function Brew(recipe)
     while _G["Auto_brew_" .. recipe.name] do
         local args = { [1] = recipe.ingredients }
         game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
-        task.wait(recipe.delay or 3)
+        task.wait(recipe.delay or 1.5)
     end
 end
 
