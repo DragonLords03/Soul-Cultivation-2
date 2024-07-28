@@ -27,7 +27,7 @@ local function createFarmFunction(herbType)
                 local herbPart = herb:FindFirstChild("HerbZone")
                 if herbPart then
                     localPlayer.Character.HumanoidRootPart.CFrame = herbPart.CFrame
-                    task.wait(0.75)
+                    task.wait(0.7)
                     game:GetService("ReplicatedStorage").RemoteEvents.Harvest:FireServer()
                     task.wait(_G["WaitTime_" .. herbType] or 1)
                 end
@@ -172,6 +172,32 @@ local function Brew()
         task.wait(3)
     end
 end
+local function Brew2()
+    while _G.Auto_brew2 do
+        local args = {
+            [1] = {
+                [1] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Hundred"
+                },
+                [2] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Hundred"
+                },
+                [3] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Hundred"
+                },
+                [4] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Thousand"
+                }
+            }
+        }
+        game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
+        task.wait(3)
+    end
+end
 
 local function Restore()
     local timesToRun = _G["Restore_Times"] or 1
@@ -217,6 +243,12 @@ c:CreateToggle("1 10y/ 2 10y/ 1 100ky", function(value)
     _G.Auto_brew = value
     if value then
         task.spawn(Brew)
+    end
+end)
+c:CreateToggle("3 10y/ 1 100ky", function(value)
+    _G.Auto_brew2 = value
+    if value then
+        task.spawn(Brew2)
     end
 end)
 
