@@ -198,6 +198,58 @@ local function Brew2()
         task.wait(3)
     end
 end
+local function Brew3()
+    while _G.Auto_brew3 do
+        local args = {
+            [1] = {
+                [1] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Hundred"
+                },
+                [2] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Hundred"
+                },
+                [3] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Hundred"
+                },
+                [4] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Thousand"
+                }
+            }
+        }
+        game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
+        task.wait(3)
+    end
+end
+local function Brew4()
+    while _G.Auto_brew4 do
+        local args = {
+            [1] = {
+                [1] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Hundred"
+                },
+                [2] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Hundred"
+                },
+                [3] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Hundred"
+                },
+                [4] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Hundred"
+                }
+            }
+        }
+        game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
+        task.wait(3)
+    end
+end
 
 local function Restore()
     local timesToRun = _G["Restore_Times"] or 1
@@ -249,6 +301,18 @@ c:CreateToggle("1 10y/ 2 100y/ 1ky", function(value)
     _G.Auto_brew2 = value
     if value then
         task.spawn(Brew2)
+    end
+end)
+c:CreateToggle("3 100y / 1ky", function(value)
+    _G.Auto_brew3 = value
+    if value then
+        task.spawn(Brew3)
+    end
+end)
+c:CreateToggle("4 100y", function(value)
+    _G.Auto_brew4 = value
+    if value then
+        task.spawn(Brew4)
     end
 end)
 
