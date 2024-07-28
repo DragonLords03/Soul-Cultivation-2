@@ -166,7 +166,8 @@ local recipes = {
     { name = "Brew1", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Ten" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" } } },
     { name = "Brew2", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" } } },
     { name = "Brew3", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" } } },
-    { name = "Brew4", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" }, { ["Name"] = "Ginseng", ["Variation"] = "Ten Thousand" } } }
+    { name = "Brew4", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" } } },
+    { name = "Brew5", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" }, { ["Name"] = "Ginseng", ["Variation"] = "Ten Thousand" } } }
 }
 
 for _, recipe in ipairs(recipes) do
