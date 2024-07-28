@@ -53,8 +53,8 @@ local function groupEnemiesByName()
 end
 
 local enemyToNpcMap = {
-    Commoner = "Xi Hao",
-    Bandit = "Bei Fang",
+    ["Commoner"] = "Xi Hao",
+    ["Bandit"] = "Bei Fang",
     ["Female Blood Cultivator"] = "Yang Wei",
     ["Furious Sect Member"] = "Taoist Xi",
     ["Male Assassin"] = "Sun Tao",
@@ -74,26 +74,27 @@ local function grindEnemies(enemyType)
         return
     end
     
+    local lastHumanoidRootPart = nil
+
     while _G.Auto_Grind and selectedEnemyType == enemyType do
         local enemies = game:GetService("Workspace").Enemies:GetChildren()
         for _, enemy in ipairs(enemies) do
             if not _G.Auto_Grind or selectedEnemyType ~= enemyType then return end
             if enemy.Name == enemyType then
                 local humanoidRootPart = enemy:FindFirstChild("HumanoidRootPart")
-                if humanoidRootPart then
+                if humanoidRootPart and humanoidRootPart ~= lastHumanoidRootPart then
+                    lastHumanoidRootPart = humanoidRootPart
+
                     local questArgs = { npcName }
                     game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
                     
                     localPlayer.Character.HumanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, -3, 0)
                     task.wait(0.25)
-                    local args = {
-                        [1] = "Light",
-                        [2] = {
-                            ["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-                        }
-                    }
+
+                    local args = {[1] = "Light",[2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
                     game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
                     task.wait(0.5)
+
                     local questArgs = { npcName }
                     game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
                 end
@@ -146,116 +147,47 @@ for _, herb in ipairs(herbs) do
     end)
 end
 
-local function Brew()
-    while _G.Auto_brew do
-        local args = {
-            [1] = {
-                [1] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
-                },
-                [2] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
-                },
-                [3] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Thousand"
-                },
-                [4] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Ten Thousand"
-                }
-            }
-        }
+local function Brew(recipe)
+    while _G["Auto_brew_" .. recipe.name] do
+        local args = { [1] = recipe.ingredients }
         game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
-        task.wait(3)
+        task.wait(recipe.delay or 3)
     end
 end
-local function Brew2()
-    while _G.Auto_brew2 do
-        local args = {
-            [1] = {
-                [1] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Ten"
-                },
-                [2] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
-                },
-                [3] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
-                },
-                [4] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Thousand"
-                }
-            }
-        }
-        game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
-        task.wait(3)
+
+local variationToNumber = {
+    ["Ten"] = "10",
+    ["Hundred"] = "100",
+    ["Thousand"] = "1k",
+    ["Ten Thousand"] = "10k"
+}
+
+local recipes = {
+    { name = "Brew1", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Ten" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" } } },
+    { name = "Brew2", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" } } },
+    { name = "Brew3", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" } } },
+    { name = "Brew4", ingredients = { { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Hundred" }, { ["Name"] = "Ginseng", ["Variation"] = "Thousand" }, { ["Name"] = "Ginseng", ["Variation"] = "Ten Thousand" } } }
+}
+
+for _, recipe in ipairs(recipes) do
+    local variations = {}
+    for _, ingredient in ipairs(recipe.ingredients) do
+        table.insert(variations, variationToNumber[ingredient["Variation"]] .. "y")
     end
-end
-local function Brew3()
-    while _G.Auto_brew3 do
-        local args = {
-            [1] = {
-                [1] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
-                },
-                [2] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
-                },
-                [3] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
-                },
-                [4] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Thousand"
-                }
-            }
-        }
-        game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
-        task.wait(3)
-    end
-end
-local function Brew4()
-    while _G.Auto_brew4 do
-        local args = {
-            [1] = {
-                [1] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
-                },
-                [2] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
-                },
-                [3] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
-                },
-                [4] = {
-                    ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
-                }
-            }
-        }
-        game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
-        task.wait(3)
-    end
+    local toggleName = table.concat(variations, "/")
+
+    c:CreateToggle(toggleName, function(value)
+        _G["Auto_brew_" .. recipe.name] = value
+        if value then
+            task.spawn(function() Brew(recipe) end)
+        end
+    end)
 end
 
 local function Restore()
     local timesToRun = _G["Restore_Times"] or 1
     for i = 1, timesToRun do
         if not _G.Auto_Restore then return end
-        task.wait(99)
         local args = {
             [1] = "Use",
             [2] = 1,
@@ -264,18 +196,19 @@ local function Restore()
             [5] = "IT. 1"
         }
         game:GetService("ReplicatedStorage").RemoteEvents.Item:FireServer(unpack(args))
+        task.wait(99)
     end
     _G.Auto_Restore = false
 end
 
-local function Breaktrhough_training()
-    local args = {[1] = "Body Refining",[2] = true}
+local function Breakthrough_training()
+    local args = { [1] = "Body Refining", [2] = true }
     game:GetService("ReplicatedStorage").RemoteFunctions.CastAbility:InvokeServer(unpack(args))
     task.wait(0.6)
-    local args = {[1] = "Use",[2] = 1,[3] = "Restoration Pill",[4] = "Low",[5] = "IT. 1"}
+    local args = { [1] = "Use", [2] = 1, [3] = "Restoration Pill", [4] = "Low", [5] = "IT. 1" }
     game:GetService("ReplicatedStorage").RemoteEvents.Item:FireServer(unpack(args))
     task.wait(0.4)
-    local args = {[1] = "Body"}
+    local args = { [1] = "Body" }
     game:GetService("ReplicatedStorage").RemoteEvents.Breakthrough:FireServer(unpack(args))
     task.wait()
 end
@@ -289,31 +222,6 @@ end)
 
 b:CreateDropdown("Select Enemy Type", enemyNames, 1, function(selected)
     selectedEnemyType = selected
-end)
-
-c:CreateToggle("2 100y/ 1 1ky/ 1 10ky", function(value)
-    _G.Auto_brew = value
-    if value then
-        task.spawn(Brew)
-    end
-end)
-c:CreateToggle("1 10y/ 2 100y/ 1ky", function(value)
-    _G.Auto_brew2 = value
-    if value then
-        task.spawn(Brew2)
-    end
-end)
-c:CreateToggle("3 100y / 1ky", function(value)
-    _G.Auto_brew3 = value
-    if value then
-        task.spawn(Brew3)
-    end
-end)
-c:CreateToggle("4 100y", function(value)
-    _G.Auto_brew4 = value
-    if value then
-        task.spawn(Brew4)
-    end
 end)
 
 d:CreateToggle("Restore Fatigue", function(value)
@@ -333,6 +241,6 @@ d:CreateTextbox("Restore Times", function(text)
     end
 end)
 
-d:CreateButton("Breaktrhough Training", function(value)
-    Breaktrhough_training()
+d:CreateButton("Breakthrough Training", function(value)
+    Breakthrough_training()
 end)
