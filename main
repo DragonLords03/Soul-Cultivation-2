@@ -20,12 +20,17 @@ local a = ui2:NewSection("Herbs")
 
 local function createFarmFunction(herbType)
     return function()
-        while _G["Auto_Farm_" .. herbType] do
+        while _G["Auto_Farm_" .. herbType] do  
             local herbFolder = game:GetService("Workspace").Herbs[herbType]
             for _, herb in pairs(herbFolder:GetChildren()) do
                 if not _G["Auto_Farm_" .. herbType] then return end
                 local herbPart = herb:FindFirstChild("HerbZone")
                 if herbPart then
+                    if herbType == "Blood Flowers" then
+                        local questArgs = { "Zhang Yiwang" }
+                        game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
+                        task.wait(0.5)
+                    end
                     localPlayer.Character.HumanoidRootPart.CFrame = herbPart.CFrame
                     task.wait(0.7)
                     game:GetService("ReplicatedStorage").RemoteEvents.Harvest:FireServer()
