@@ -173,6 +173,33 @@ local function Brew()
     end
 end
 
+local function Brew2()
+    while _G.Auto_brew2 do
+        local args = {
+            [1] = {
+                [1] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Ten"
+                },
+                [2] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Hundred"
+                },
+                [3] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Hundred"
+                },
+                [4] = {
+                    ["Name"] = "Ginseng",
+                    ["Variation"] = "Thousand"
+                }
+            }
+        }
+        game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
+        task.wait(3)
+    end
+end
+
 local function Restore()
     local timesToRun = _G["Restore_Times"] or 1
     for i = 1, timesToRun do
@@ -213,10 +240,17 @@ b:CreateDropdown("Select Enemy Type", enemyNames, 1, function(selected)
     selectedEnemyType = selected
 end)
 
-c:CreateToggle("brew with 10y Ginseng", function(value)
+c:CreateToggle("4 10y ginseng", function(value)
     _G.Auto_brew = value
     if value then
         task.spawn(Brew)
+    end
+end)
+
+c:CreateToggle("1 10y/ 2 10y/ 1 100ky", function(value)
+    _G.Auto_brew2 = value
+    if value then
+        task.spawn(Brew2)
     end
 end)
 
