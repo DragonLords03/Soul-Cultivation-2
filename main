@@ -152,7 +152,7 @@ local function Brew()
             [1] = {
                 [1] = {
                     ["Name"] = "Ginseng",
-                    ["Variation"] = "Ten"
+                    ["Variation"] = "Hundred"
                 },
                 [2] = {
                     ["Name"] = "Ginseng",
@@ -160,11 +160,11 @@ local function Brew()
                 },
                 [3] = {
                     ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
+                    ["Variation"] = "Thousand"
                 },
                 [4] = {
                     ["Name"] = "Ginseng",
-                    ["Variation"] = "Thousand"
+                    ["Variation"] = "Ten Thousand"
                 }
             }
         }
@@ -178,7 +178,7 @@ local function Brew2()
             [1] = {
                 [1] = {
                     ["Name"] = "Ginseng",
-                    ["Variation"] = "Hundred"
+                    ["Variation"] = "Ten"
                 },
                 [2] = {
                     ["Name"] = "Ginseng",
@@ -239,13 +239,13 @@ b:CreateDropdown("Select Enemy Type", enemyNames, 1, function(selected)
     selectedEnemyType = selected
 end)
 
-c:CreateToggle("1 10y/ 2 10y/ 1 100ky", function(value)
+c:CreateToggle("2 100y/ 1 1ky/ 1 10ky", function(value)
     _G.Auto_brew = value
     if value then
         task.spawn(Brew)
     end
 end)
-c:CreateToggle("3 10y/ 1 100ky", function(value)
+c:CreateToggle("1 10y/ 2 100y/ 1ky", function(value)
     _G.Auto_brew2 = value
     if value then
         task.spawn(Brew2)
