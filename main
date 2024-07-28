@@ -235,7 +235,8 @@ local recipes = {
     { name = "Brew4", ingredients = { { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" } } },
     { name = "Brew5", ingredients = { { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" } } },
     { name = "Brew6", ingredients = { { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" } } },
-    { name = "Brew7", ingredients = { { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" } } }
+    { name = "Brew7", ingredients = { { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" } } },
+    { name = "Brew8", ingredients = { { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" } } }
 }
 
 for _, recipe in ipairs(recipes) do
