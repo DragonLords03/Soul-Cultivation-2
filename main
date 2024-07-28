@@ -62,14 +62,14 @@ for _, herb in ipairs(herbs) do
     _G["Auto_Farm_" .. herbName] = false
     _G["WaitTime_" .. herbName] = 1
     _G["Farm_" .. herbName] = createFarmFunction(herbName)
-    
+
     a:CreateToggle("Farm " .. herbName, function(value)
         _G["Auto_Farm_" .. herbName] = value
         if value then
             task.spawn(_G["Farm_" .. herbName])
         end
     end)
-    
+
     a:CreateTextbox("Wait Time for " .. herbName, function(text)
         local waitTime = tonumber(text)
         if waitTime then
@@ -123,7 +123,7 @@ local function grindEnemies(enemyType)
         print("No NPC mapped for enemy type: " .. enemyType)
         return
     end
-    
+
     local lastHumanoidRootPart = {}
     local args = {[1] = "Quest"}
     game:GetService("ReplicatedStorage").RemoteEvents.Discard:FireServer(unpack(args))
@@ -139,27 +139,14 @@ local function grindEnemies(enemyType)
 
                     local questArgs = { npcName }
                     game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
-                    
+
                     localPlayer.Character.HumanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 0, 0)
 
-                    local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                    game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                    task.wait(0.05)
-                    local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                    game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                    task.wait(0.05)
-                    local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                    game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                    task.wait(0.05)
-                    local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                    game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                    task.wait(0.05)
-                    local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                    game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                    task.wait(0.05)
-                    local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                    game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                    task.wait(0.05)
+                    for i = 1, 6 do
+                        local args = {"Light", {RootPart = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
+                        game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
+                        task.wait(0.05)
+                    end
 
                     game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
                 end
@@ -194,24 +181,11 @@ local function AutoKill()
                         game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
                         localPlayer.Character.HumanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 0, 0)
 
-                        local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                        game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                        task.wait(0.05)
-                        local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                        game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                        task.wait(0.05)
-                        local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                        game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                        task.wait(0.05)
-                        local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                        game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                        task.wait(0.05)
-                        local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                        game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                        task.wait(0.05)
-                        local args = {[1] = "Light", [2] = {["RootPart"] = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                        game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                        task.wait(0.05)
+                        for i = 1, 6 do
+                            local args = {"Light", {RootPart = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
+                            game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
+                            task.wait(0.05)
+                        end
 
                         killed = killed + 1
                         if killed >= count then
