@@ -153,6 +153,7 @@ local function grindEnemies(enemyType)
                 end
             end
         end
+        task.wait()
     end
 end
 
