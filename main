@@ -15,10 +15,11 @@ local ui = Library:NewWindow("Soul Cultivation")
 local ui2 = Library:NewWindow("Soul Cultivation")
 local ui3 = Library:NewWindow("Soul Cultivation")
 local b = ui:NewSection("Farm")
+local e = ui:NewSection("Special Farming")
 local d = ui:NewSection("Training")
-local c = ui:NewSection("Brew")
+local c = ui3:NewSection("Brew")
 local a = ui2:NewSection("Herbs")
-local e = ui3:NewSection("Special Farming")
+
 
 local herbs = {
     "Spirit Grass",
