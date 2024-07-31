@@ -19,7 +19,6 @@ local d = ui:NewSection("Training")
 local c = ui3:NewSection("Brew")
 local a = ui2:NewSection("Herbs")
 
-
 local herbs = {
     "Spirit Grass",
     "Lingzhi",
@@ -183,6 +182,8 @@ local recipes = {
     { name = "Brew7", ingredients = { { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" } } },
     { name = "Brew8", ingredients = { { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" } } },
     { name = "Brew9", ingredients = { { Name = "Yin Bush", Variation = "Thousand" }, { Name = "Yin Bush", Variation = "Thousand" }, { Name = "Yang Flower", Variation = "Thousand" }, { Name = "Yang Flower", Variation = "Thousand" } } },
+    { name = "Brew10", ingredients = { { Name = "Yin Bush", Variation = "Ten Thousand" }, { Name = "Yin Bush", Variation = "Ten Thousand" }, { Name = "Yang Flower", Variation = "Ten Thousand" }, { Name = "Yang Flower", Variation = "Ten Thousand" } } },
+
 }
 
 for _, recipe in ipairs(recipes) do
@@ -249,6 +250,4 @@ end)
 
 d:CreateButton("Breakthrough Training", function()
     Breakthrough_training()
-end)
-    end
 end)
