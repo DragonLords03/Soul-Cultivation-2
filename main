@@ -186,10 +186,6 @@ local recipes = {
     { name = "Brew9", ingredients = { { Name = "Yin Bush", Variation = "Thousand" }, { Name = "Yin Bush", Variation = "Thousand" }, { Name = "Yang Flower", Variation = "Thousand" }, { Name = "Yang Flower", Variation = "Thousand" } } },
 }
 
-game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
-
-}
-
 for _, recipe in ipairs(recipes) do
     local variations = {}
     for _, ingredient in ipairs(recipe.ingredients) do
