@@ -15,7 +15,6 @@ local ui = Library:NewWindow("Soul Cultivation")
 local ui3 = Library:NewWindow("Soul Cultivation")
 local ui2 = Library:NewWindow("Soul Cultivation")
 local b = ui:NewSection("Farm")
-local e = ui:NewSection("Special Farming")
 local d = ui:NewSection("Training")
 local c = ui3:NewSection("Brew")
 local a = ui2:NewSection("Herbs")
@@ -251,10 +250,5 @@ end)
 d:CreateButton("Breakthrough Training", function()
     Breakthrough_training()
 end)
-
-e:CreateToggle("Auto Kill", function(value)
-    _G.AutoKill = value
-    if value then
-        task.spawn(AutoKill)
     end
 end)
