@@ -157,61 +157,6 @@ local function grindEnemies(enemyType)
     end
 end
 
-local function AutoKill()
-    local function getAndKillEnemies(enemyType, count)
-        local npcName = enemyToNpcMap[enemyType]
-        if not npcName then
-            print("No NPC mapped for enemy type: " .. enemyType)
-            return
-        end
-
-        local killed = 0
-        local lastHumanoidRootPart = {}
-        local args = {[1] = "Quest"}
-        game:GetService("ReplicatedStorage").RemoteEvents.Discard:FireServer(unpack(args))
-        task.wait()
-        while _G.AutoKill and killed < count do
-            local enemies = game:GetService("Workspace").Enemies:GetChildren()
-            for _, enemy in ipairs(enemies) do
-                if enemy.Name == enemyType and not lastHumanoidRootPart[enemy] then
-                    local humanoidRootPart = enemy:FindFirstChild("HumanoidRootPart")
-                    if humanoidRootPart then
-                        lastHumanoidRootPart[enemy] = humanoidRootPart
-
-                        local questArgs = { npcName }
-                        game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
-                        localPlayer.Character.HumanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(0, 0, 0)
-
-                        for i = 1, 3 do
-                            local args = {"Light", {RootPart = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart}}
-                            game:GetService("ReplicatedStorage").RemoteEvents.Attack:FireServer(unpack(args))
-                            task.wait(0.25)
-                        end
-
-                        killed = killed + 1
-                        if killed >= count then
-                            local nextNpcName
-                            if enemyType == "Corrupt Admiral" then
-                                nextNpcName = "Yang Zhu"
-                            end
-                            game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(nextNpcName)
-                            break
-                        else
-                            game:GetService("ReplicatedStorage").RemoteFunctions.Quest:InvokeServer(unpack(questArgs))
-                        end
-                    end
-                end
-            end
-            task.wait()
-        end
-    end
-
-    while _G.AutoKill do
-        getAndKillEnemies("Corrupt Admiral", 6)
-        getAndKillEnemies("Mount Hua Leader", 1)
-    end
-end
-
 local function Brew(recipe)
     while _G["Auto_brew_" .. recipe.name] do
         local args = { [1] = recipe.ingredients }
@@ -237,7 +182,12 @@ local recipes = {
     { name = "Brew5", ingredients = { { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" }, { Name = "Ginseng", Variation = "Hundred Thousand" } } },
     { name = "Brew6", ingredients = { { Name = "Ginseng", Variation = "Hundred" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" } } },
     { name = "Brew7", ingredients = { { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" } } },
-    { name = "Brew8", ingredients = { { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" } } }
+    { name = "Brew8", ingredients = { { Name = "Ginseng", Variation = "Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" }, { Name = "Ginseng", Variation = "Ten Thousand" } } },
+    { name = "Brew9", ingredients = { { Name = "Yin Bush", Variation = "Thousand" }, { Name = "Yin Bush", Variation = "Thousand" }, { Name = "Yang Flower", Variation = "Thousand" }, { Name = "Yang Flower", Variation = "Thousand" } } },
+}
+
+game:GetService("ReplicatedStorage").RemoteFunctions.Concoct:InvokeServer(unpack(args))
+
 }
 
 for _, recipe in ipairs(recipes) do
